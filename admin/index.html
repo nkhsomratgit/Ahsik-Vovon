@@ -1,1 +1,646 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080808">
+<title>আশিক ভবন — Admin Panel</title>
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    min-height:100vh;
+    font-family:Arial,"Noto Sans Bengali",sans-serif;
+    color:#eee;
+    background:
+    radial-gradient(circle at 10% 10%,rgba(216,173,85,.14),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(216,173,85,.10),transparent 30%),
+    #070707;
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* LOGIN */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(430px,100%);
+    padding:35px;
+    border:1px solid rgba(216,173,85,.25);
+    border-radius:28px;
+    background:rgba(18,18,18,.88);
+    backdrop-filter:blur(25px);
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+}
+
+.logo{
+    width:65px;
+    height:65px;
+    margin:0 auto 18px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    color:#080808;
+    font-size:32px;
+    background:linear-gradient(135deg,#f4d58a,#b78935);
+}
+
+.login-box h1{
+    text-align:center;
+    color:#fff;
+    font-size:27px;
+}
+
+.login-box>p{
+    margin:8px 0 28px;
+    text-align:center;
+    color:#777;
+    font-size:12px;
+}
+
+.field{margin-bottom:16px}
+
+.field label{
+    display:block;
+    margin-bottom:7px;
+    color:#aaa;
+    font-size:12px;
+}
+
+.field input{
+    width:100%;
+    padding:14px 15px;
+    outline:none;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:13px;
+    color:#fff;
+    background:rgba(255,255,255,.045);
+}
+
+.field input:focus{
+    border-color:rgba(216,173,85,.55);
+    box-shadow:0 0 0 3px rgba(216,173,85,.08);
+}
+
+.login-button,
+.submit-button{
+    border:0;
+    color:#080808;
+    font-weight:800;
+    background:linear-gradient(135deg,#f4d58a,#d8ad55);
+}
+
+.login-button{
+    width:100%;
+    margin-top:8px;
+    padding:14px;
+    border-radius:13px;
+}
+
+.message{
+    min-height:20px;
+    margin-top:14px;
+    text-align:center;
+    color:#e7b96a;
+    font-size:12px;
+}
+
+/* DASHBOARD */
+
+#dashboard{min-height:100vh}
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:15px 5%;
+    background:rgba(7,7,7,.88);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    color:#080808;
+    font-size:22px;
+    background:linear-gradient(135deg,#f4d58a,#a87828);
+}
+
+.brand strong{
+    display:block;
+    color:#fff;
+    font-size:15px;
+}
+
+.brand span{
+    display:block;
+    margin-top:2px;
+    color:#d8ad55;
+    font-size:8px;
+    letter-spacing:2px;
+}
+
+.logout{
+    padding:9px 15px;
+    border:1px solid rgba(216,173,85,.25);
+    border-radius:999px;
+    color:#d8ad55;
+    background:rgba(216,173,85,.05);
+}
+
+/* MAIN */
+
+.container{
+    width:min(1150px,92%);
+    margin:auto;
+    padding:45px 0 80px;
+}
+
+.welcome{margin-bottom:30px}
+
+.welcome small{
+    color:#d8ad55;
+    letter-spacing:2px;
+    font-size:9px;
+}
+
+.welcome h2{
+    margin-top:8px;
+    color:#fff;
+    font-size:clamp(28px,5vw,45px);
+}
+
+.welcome p{
+    margin-top:8px;
+    color:#777;
+    font-size:13px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:35px;
+}
+
+.stat{
+    padding:22px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:20px;
+    background:rgba(255,255,255,.03);
+}
+
+.stat strong{
+    display:block;
+    color:#f4d58a;
+    font-size:28px;
+}
+
+.stat span{
+    display:block;
+    margin-top:5px;
+    color:#777;
+    font-size:11px;
+}
+
+/* GRID */
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
+}
+
+.panel{
+    padding:25px;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:23px;
+    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.full{grid-column:1/-1}
+
+.panel-header{margin-bottom:20px}
+
+.panel-header small{
+    color:#d8ad55;
+    font-size:9px;
+    letter-spacing:2px;
+}
+
+.panel-header h3{
+    margin-top:5px;
+    color:#fff;
+    font-size:22px;
+}
+
+/* FORM */
+
+.form-group{margin-bottom:15px}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    color:#aaa;
+    font-size:11px;
+}
+
+.form-group input{
+    width:100%;
+    padding:13px;
+    border:1px solid rgba(255,255,255,.08);
+    outline:none;
+    border-radius:12px;
+    color:#fff;
+    background:rgba(0,0,0,.25);
+}
+
+.form-group input:focus{
+    border-color:rgba(216,173,85,.5);
+}
+
+.submit-button{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+}
+
+.submit-button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.status{
+    min-height:18px;
+    margin-top:10px;
+    color:#d8ad55;
+    font-size:11px;
+    text-align:center;
+}
+
+/* ITEMS */
+
+.items{
+    display:grid;
+    gap:10px;
+}
+
+.item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:15px;
+    background:rgba(255,255,255,.025);
+}
+
+.item-thumb{
+    width:52px;
+    height:52px;
+    flex:0 0 52px;
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    color:#d8ad55;
+    background:#191919;
+    font-size:22px;
+}
+
+.item-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.item-info{
+    flex:1;
+    min-width:0;
+}
+
+.item-info strong{
+    display:block;
+    color:#eee;
+    font-size:13px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.item-info span{
+    display:block;
+    margin-top:4px;
+    color:#666;
+    font-size:10px;
+}
+
+.delete-button{
+    padding:8px 11px;
+    border:1px solid rgba(255,80,80,.2);
+    border-radius:9px;
+    color:#ff8b8b;
+    background:rgba(255,60,60,.06);
+    font-size:11px;
+}
+
+.empty{
+    padding:25px;
+    text-align:center;
+    color:#666;
+    font-size:12px;
+}
+
+@media(max-width:800px){
+    .admin-grid{grid-template-columns:1fr}
+    .full{grid-column:auto}
+}
+
+@media(max-width:600px){
+    .stats{gap:8px}
+    .stat{padding:15px 8px;text-align:center}
+    .stat strong{font-size:22px}
+    .stat span{font-size:9px}
+    .panel{padding:19px}
+    .item{padding:9px}
+}
+</style>
+</head>
+
+<body>
+
+<section id="loginPage">
+
+<div class="login-box">
+
+<div class="logo">♪</div>
+
+<h1>Admin Panel</h1>
+
+<p>আশিক ভবন — Official Music</p>
+
+<form id="loginForm">
+
+<div class="field">
+<label>Username</label>
+<input
+id="username"
+type="text"
+autocomplete="username"
+placeholder="Admin username"
+required>
+</div>
+
+<div class="field">
+<label>Password</label>
+<input
+id="password"
+type="password"
+autocomplete="current-password"
+placeholder="Admin password"
+required>
+</div>
+
+<button
+class="login-button"
+type="submit">
+LOGIN
+</button>
+
+<div
+id="loginMessage"
+class="message">
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+
+<section id="dashboard" class="hidden">
+
+<header class="topbar">
+
+<div class="brand">
+
+<div class="brand-icon">♪</div>
+
+<div>
+<strong>আশিক ভবন</strong>
+<span>ADMIN PANEL</span>
+</div>
+
+</div>
+
+<button
+id="logoutButton"
+class="logout">
+Logout
+</button>
+
+</header>
+
+
+<main class="container">
+
+<div class="welcome">
+
+<small>CONTROL CENTER</small>
+
+<h2>Admin Dashboard</h2>
+
+<p>
+এখান থেকে Website-এর গান ও ছবি পরিচালনা করুন।
+</p>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+<strong id="totalSongs">0</strong>
+<span>মোট গান</span>
+</div>
+
+<div class="stat">
+<strong id="totalPhotos">0</strong>
+<span>মোট ছবি</span>
+</div>
+
+<div class="stat">
+<strong>✓</strong>
+<span>Website Online</span>
+</div>
+
+</div>
+
+
+<div class="admin-grid">
+
+
+<div class="panel">
+
+<div class="panel-header">
+<small>MUSIC MANAGEMENT</small>
+<h3>নতুন গান যোগ করুন</h3>
+</div>
+
+<form id="songForm">
+
+<div class="form-group">
+<label>গানের নাম</label>
+<input
+name="title"
+type="text"
+placeholder="গানের নাম লিখুন"
+required>
+</div>
+
+<div class="form-group">
+<label>শিল্পীর নাম</label>
+<input
+name="artist"
+type="text"
+value="আশিক ভবন">
+</div>
+
+<div class="form-group">
+<label>গান / Audio File</label>
+<input
+name="audio"
+type="file"
+accept="audio/*"
+required>
+</div>
+
+<div class="form-group">
+<label>Cover Photo</label>
+<input
+name="cover"
+type="file"
+accept="image/*">
+</div>
+
+<button
+id="songSubmit"
+class="submit-button"
+type="submit">
+🎵 গান যোগ করুন
+</button>
+
+<div
+id="songStatus"
+class="status">
+</div>
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<div class="panel-header">
+<small>GALLERY MANAGEMENT</small>
+<h3>নতুন ছবি যোগ করুন</h3>
+</div>
+
+<form id="photoForm">
+
+<div class="form-group">
+<label>ছবির নাম</label>
+<input
+name="title"
+type="text"
+placeholder="ছবির নাম">
+</div>
+
+<div class="form-group">
+<label>ছবি নির্বাচন করুন</label>
+<input
+name="image"
+type="file"
+accept="image/*"
+required>
+</div>
+
+<button
+id="photoSubmit"
+class="submit-button"
+type="submit">
+📸 ছবি যোগ করুন
+</button>
+
+<div
+id="photoStatus"
+class="status">
+</div>
+
+</form>
+
+</div>
+
+
+<div class="panel full">
+
+<div class="panel-header">
+<small>SONG LIBRARY</small>
+<h3>সব গান</h3>
+</div>
+
+<div id="songList" class="items">
+<div class="empty">গান লোড হচ্ছে...</div>
+</div>
+
+</div>
+
+
+<div class="panel full">
+
+<div class="panel-header">
+<small>PHOTO GALLERY</small>
+<h3>সব ছবি</h3>
+</div>
+
+<div id="photoList" class="items">
+<div class="empty">ছবি লোড হচ্ছে...</div>
+</div>
+
+</div>
+
+
+</div>
+</main>
+</section>
+
+<script>
